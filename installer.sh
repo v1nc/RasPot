@@ -1,18 +1,10 @@
 #!/bin/bash
-
+echo "RasPot is based on HoneyPi by mattymcfatty!"
 #check root
 if [ $UID -ne 0 ]
 then
- echo "Please run this script as root: sudo honeyPI.sh"
+ echo "Please run this script as root: sudo ./installer.sh"
  exit 1
-fi
-
-####Disclaimer!###
-if whiptail --yesno "Hey Hey! You're about to install honeyPi to turn this Raspberry Pi into an IDS/honeypot. Congratulations on being so clever! This install process will change some things on your Pi. Most notably, it will flush your iptables and turn up logging. There is no UNINSTALL script, so think hard about not doing this if you plan to use your Pi for other things. Select 'Yes' if you're cool with all that or 'No' to stop now." 20 60
-then
-  echo "continue"
-else
-  exit 1
 fi
 
 ####Change password if you haven't yet###
@@ -25,7 +17,7 @@ then
 fi
 
 ####Install Debian updates ###
-if whiptail --yesno "Let's install some updates. Answer 'no' if you are just experimenting and want to save some time (updates might take 15 minutes or more). Otherwise, shall we update now?" 20 60
+if whiptail --yesno "Do you want to update your RasPot?" 20 60
 then
  apt-get update
  apt-get dist-upgrade
@@ -33,7 +25,7 @@ fi
 
 
 ####Name the host something enticing ###
-sneakyname=$(whiptail --inputbox "Let's name your honeyPi something enticing like 'SuperSensitiveServer'. Well maybe not that obvious, but you get the idea. Remember, hostnames cannot contain spaces or most special chars. Best to keep it to just alphanumeric and less thaann 24 characters." 20 60 3>&1 1>&2 2>&3)
+sneakyname=$(whiptail --inputbox "Let's name your RasPot something enticing like 'SuperSensitiveServer'. Well maybe not that obvious, but you get the idea. Remember, hostnames cannot contain spaces or most special chars. Best to keep it to just alphanumeric and less thaann 24 characters." 20 60 3>&1 1>&2 2>&3)
 echo $sneakyname > /etc/hostname
 echo "127.0.0.1 $sneakyname" >> /etc/hosts
 
@@ -42,7 +34,7 @@ whiptail --infobox "Installing a bunch of software like the log monitoring servi
 apt-get -y install psad msmtp msmtp-mta python-twisted iptables-persistent libnotify-bin fwsnort raspberrypi-kernel-headers
 
 ###Choose Notification Option###
-OPTION=$(whiptail --menu "Choose how you want to get notified:" 20 60 5 "email" "Send me an email" "script" "Execute a script" "blink" "Blink a light on your Raspberry Pi" 3>&2 2>&1 1>&3)
+OPTION=$(whiptail --menu "Choose how you want to get notified:" 20 60 5 "email" "Send me an email" "script" "Execute a script" "blink" "Blink a light on your Raspberry Pi" "telegram" "Get a message on Telegram" 3>&2 2>&1 1>&3)
 emailaddy=test@example.com
 enablescript=N
 externalscript=/bin/true
@@ -62,7 +54,7 @@ case $OPTION in
 		whiptail --msgbox "Now, create an 'App Password' for your gmail account (google it if you don't know how). Because we don't want to assign your password to any variables, you have to manually edit the smtp configuration file on the next screen. Save and exit the editor and I'll see you back here." 20 60
 		pico /etc/msmtprc
 		whiptail --msgbox "Welcome back! Well Done! Here comes a test message to your email address..." 20 60
-		echo "test message from honeyPi" | msmtp -vvv $emailaddy
+		echo "test message from RasPot" | msmtp -vvv $emailaddy
 		if whiptail --yesno "Cool. Now wait a couple minutes and see if that test message shows up. 'Yes' to continue or 'No' to exit and mess with your smtp config." 20 60
  		then
   			echo "Continue"
@@ -76,10 +68,15 @@ case $OPTION in
 		enablescript=Y
 		alertingmethod=noemail
 	;;
+	telegram)
+		externalscript="/root/RasPot/telegram.sh -ip SRCIP"
+		enablescript=Y
+		alertingmethod=noemail
+	;;
 	blink)
 		enablescript=Y
 		alertingmethod=noemail
-		externalscript="/usr/bin/python /root/honeyPi/blinkonce.py"
+		externalscript="/usr/bin/python /root/RasPot/blinkonce.py"
 	;;
 esac
 
@@ -94,8 +91,10 @@ sed -i "s/xcheckx/$check/g" psad.conf
 
 ###Wrap up everything and exit
 whiptail --msgbox "Configuration files created. Next we will move those files to the right places." 20 60
-mkdir /root/honeyPi
-cp blink*.* /root/honeyPi
+mkdir /root/RasPot
+cp blink*.* /root/RasPot
+cp telegram.conf /root/RasPot
+cp telegram.sh /root/RasPot
 cp psad.conf /etc/psad/psad.conf
 iptables --flush
 iptables -A INPUT -p igmp -j DROP
@@ -106,9 +105,9 @@ service netfilter-persistent save
 service netfilter-persistent restart
 psad --sig-update
 service psad restart
-cp mattshoneypot.py /root/honeyPi
-(crontab -l 2>/dev/null; echo "@reboot python /root/honeyPi/mattshoneypot.py &") | crontab -
-python /root/honeyPi/mattshoneypot.py &
+cp raspot.py /root/RasPot
+(crontab -l 2>/dev/null; echo "@reboot python /root/RasPot/raspot.py &") | crontab -
+python /root/RasPot/raspot.py &
 ifconfig
-printf "\n \n ok, now reboot and you should be good to go. Then, go portscan this honeyPi from another machine and see if you get an alert!\n"
+printf "\n \n ok, now reboot and you should be good to go. Then, go portscan this RasPot from another machine and see if you get an alert!\n"
 

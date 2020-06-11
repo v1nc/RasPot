@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import binascii
 import time
+import os
 
 from twisted.internet.protocol import Protocol, Factory
 from twisted.internet import reactor
@@ -17,9 +18,16 @@ def formattedprint(toprint):
 	curr = time.strftime("%Y-%m-%d %H:%M:%S: ")
 	print(curr + toprint)
 
+def notify(text):
+	os.system("bash /root/RasPot/telegram -text {}".format(text))
+
+def notify_connection(host,port):
+	notify("<b>⚠️⚠️⚠️RasPot Alert⚠️⚠️⚠️</b>%0A%0A<code>{}</code> tried to connect on port <code>{}</code>".format(host,port))
+
 class FakeTELNETClass(Protocol):
 	def connectionMade(self):
 		global TELNET_response
+
 		formattedprint("Inbound TELNET connection from: %s (%d/TCP)" % (self.transport.getPeer().host, self.transport.getPeer().port))
 		self.transport.write(TELNET_response)
 		formattedprint("Sending TELNET response...")
@@ -46,10 +54,10 @@ FakeFTP.protocol = FakeFTPClass
 FakeTELNET = Factory()
 FakeTELNET.protocol = FakeTELNETClass
 
-formattedprint("Starting up honeypot python program...")
+formattedprint("Starting up RasPot.")
 reactor.listenTCP(5900, FakeVNC, interface = interface)
 reactor.listenTCP(21, FakeFTP, interface = interface)
 reactor.listenTCP(23, FakeTELNET, interface = interface)
 reactor.run()
-formattedprint("Shutting down honeypot python program...")
+formattedprint("Shutting down RasPot.")
 
