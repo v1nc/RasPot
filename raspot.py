@@ -28,22 +28,30 @@ def notify_connection(host,port):
 class FakeTELNETClass(Protocol):
 	def connectionMade(self):
 		global TELNET_response
-
-		formattedprint("Inbound TELNET connection from: %s (%d/TCP)" % (self.transport.getPeer().host, self.transport.getPeer().port))
+		host = self.transport.getPeer().host
+		port = self.transport.getPeer().port
+		notify_connection(host,port)
+		formattedprint("Inbound TELNET connection from: %s (%d/TCP)" % (host, port))
 		self.transport.write(TELNET_response)
 		formattedprint("Sending TELNET response...")
 
 class FakeFTPClass(Protocol):
 	def connectionMade(self):
 		global FTP_response
-		formattedprint("Inbound FTP connection from: %s (%d/TCP)" % (self.transport.getPeer().host, self.transport.getPeer().port))
+		host = self.transport.getPeer().host
+		port = self.transport.getPeer().port
+		notify_connection(host,port)
+		formattedprint("Inbound FTP connection from: %s (%d/TCP)" % (host, port))
 		self.transport.write(FTP_response)
 		formattedprint("Sending FTP response...")
 
 class FakeVNCClass(Protocol):
 	def connectionMade(self):
 		global VNC_RFB
-		formattedprint("Inbound VNC connection from: %s (%d/TCP)" % (self.transport.getPeer().host, self.transport.getPeer().port))
+		host = self.transport.getPeer().host
+		port = self.transport.getPeer().port
+		notify_connection(host,port)
+		formattedprint("Inbound VNC connection from: %s (%d/TCP)" % (host, port))
 		self.transport.write(VNC_RFB)
 		formattedprint("Sending VNC response...")
 
