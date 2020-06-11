@@ -29,7 +29,7 @@ class FakeTELNETClass(Protocol):
 	def connectionMade(self):
 		global TELNET_response
 		host = self.transport.getPeer().host
-		port = self.transport.getPeer().port
+		port = 23
 		notify_connection(host,port)
 		formattedprint("Inbound TELNET connection from: %s (%d/TCP)" % (host, port))
 		self.transport.write(TELNET_response)
@@ -39,7 +39,7 @@ class FakeFTPClass(Protocol):
 	def connectionMade(self):
 		global FTP_response
 		host = self.transport.getPeer().host
-		port = self.transport.getPeer().port
+		port = 21
 		notify_connection(host,port)
 		formattedprint("Inbound FTP connection from: %s (%d/TCP)" % (host, port))
 		self.transport.write(FTP_response)
@@ -49,7 +49,7 @@ class FakeVNCClass(Protocol):
 	def connectionMade(self):
 		global VNC_RFB
 		host = self.transport.getPeer().host
-		port = self.transport.getPeer().port
+		port = 5900
 		notify_connection(host,port)
 		formattedprint("Inbound VNC connection from: %s (%d/TCP)" % (host, port))
 		self.transport.write(VNC_RFB)
