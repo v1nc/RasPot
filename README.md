@@ -17,10 +17,9 @@ sudo ./installer.sh
 ## Spoof Device
 
 You can spoof a vulnerable device to make RasPot more juicy.
-Hostname and MAC address are generated out of a known pool.
+_Hostname and MAC address are generated out of a known pool._
 
-### IP-Cams [_[raw source](https://raw.githubusercontent.com/pierrekim/pierrekim.github.io/6bd008fa7672325d470723bce18b7d00fad3d0e2/blog/2017-03-08-camera-goahead-0day.html)_]
-
+- IP-Cams [_[raw source](https://raw.githubusercontent.com/pierrekim/pierrekim.github.io/6bd008fa7672325d470723bce18b7d00fad3d0e2/blog/2017-03-08-camera-goahead-0day.html)_]:
 Finest selection of cheap IP cams that have root backdoor accounts and many more exploits 
 
 
