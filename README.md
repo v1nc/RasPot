@@ -31,7 +31,7 @@ _MAC vendor list [raw source](https://gist.githubusercontent.com/aallan/b4bb86db
 ## Telegram Notifications
 
 You can get a message on Telegram if RasPot detected something.
-
+_Do before install:_
 1. Create Telegram bot with @BotFather
 2. Get Bot's Token
 3. Get the Chat_ID of your Telegram account
