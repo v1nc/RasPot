@@ -58,7 +58,7 @@ class FakeVNCClass(Protocol):
 with open('/root/MAC', 'r') as file:
 	MAC_ADDRESS = file.read().strip()
 
-os.system("sudo ip link set eth0 down && sudo ip link set eth0 address {} && sudo ip link set eth0 up && sudo service ssh restart".format(MAC_ADDRESS))
+#os.system("sudo ip link set eth0 down && sudo ip link set eth0 address {} && sudo ip link set eth0 up && sudo service ssh restart".format(MAC_ADDRESS))
 
 FakeVNC = Factory()
 FakeVNC.protocol = FakeVNCClass

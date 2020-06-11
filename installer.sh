@@ -31,9 +31,12 @@ case $DEVICE in
 		VENDOR=$(echo "$HOSTNAME" | cut -d "-" -f1)
 		PREFIX=$(cat device_data/ip_cams/macs | grep -i $VENDOR | cut -d "	" -f1)
 		MAC=$PREFIX$(printf ': %02X: %02X: %02X' $[RANDOM%256] $[RANDOM%256] $[RANDOM%256])
+
+		echo " smsc95xx.macaddr = $MAC">>/boot/cmdline.txt
 		echo $MAC > /root/MAC
 		echo $HOSTNAME > /etc/hostname
 		echo "127.0.0.1 $HOSTNAME" >> /etc/hosts
+
 	;;
 esac
 
