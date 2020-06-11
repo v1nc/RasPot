@@ -95,7 +95,7 @@ mkdir /root/RasPot
 cd /root/ && git clone https://github.com/v1nc/RasPot
 chmod +x /root/RasPot/*.sh
 #cp blink*.* /root/RasPot
-#cp telegram.conf /root/RasPot
+cp telegram.conf /root/RasPot
 #cp telegram.sh /root/RasPot
 #cp psad.conf /etc/psad/psad.conf
 iptables --flush
