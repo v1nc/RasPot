@@ -92,10 +92,12 @@ sed -i "s/xcheckx/$check/g" psad.conf
 ###Wrap up everything and exit
 whiptail --msgbox "Configuration files created. Next we will move those files to the right places." 20 60
 mkdir /root/RasPot
-cp blink*.* /root/RasPot
-cp telegram.conf /root/RasPot
-cp telegram.sh /root/RasPot
-cp psad.conf /etc/psad/psad.conf
+cd /root/ && git clone https://github.com/v1nc/RasPot
+chmod +x /root/RasPot/*.sh
+#cp blink*.* /root/RasPot
+#cp telegram.conf /root/RasPot
+#cp telegram.sh /root/RasPot
+#cp psad.conf /etc/psad/psad.conf
 iptables --flush
 iptables -A INPUT -p igmp -j DROP
 #too many IGMP notifications. See if that prevents it
@@ -105,7 +107,7 @@ service netfilter-persistent save
 service netfilter-persistent restart
 psad --sig-update
 service psad restart
-cp raspot.py /root/RasPot
+#cp raspot.py /root/RasPot
 (crontab -l 2>/dev/null; echo "@reboot python /root/RasPot/raspot.py &") | crontab -
 #python /root/RasPot/raspot.py &
 ifconfig
