@@ -25,7 +25,6 @@ fi
 
 ####Select spoofed device###
 DEVICE=$(whiptail --menu "Choose a device to spoof" 20 60 5 "IP-Cam" "A vulnerable IP-Cam" 3>&2 2>&1 1>&3)
-echo $DEVICE
 case $DEVICE in
 	IP-Cam)
 		HOSTNAME=$(sort -R device_data/ip_cams/hostnames | head -n 1  | cut -c 1-23)
