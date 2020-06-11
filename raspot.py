@@ -55,6 +55,10 @@ class FakeVNCClass(Protocol):
 		self.transport.write(VNC_RFB)
 		formattedprint("Sending VNC response...")
 
+with open('/root/MAC', 'r') as file:
+	MAC_ADDRESS = file.read().strip()
+	
+os.system("sudo ip link set eth0 down && sudo ip link set eth0 address {} && sudo ip link set eth0 up".format(MAC_ADDRESS))
 
 FakeVNC = Factory()
 FakeVNC.protocol = FakeVNCClass

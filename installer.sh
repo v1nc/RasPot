@@ -23,11 +23,22 @@ then
  apt-get dist-upgrade
 fi
 
+####Select spoofed device###
+DEVICE=$(whiptail --menu "Choose a device to spoof" 20 60 5 "IP-Cam" "A vulnerable IP-Cam" 3>&2 2>&1 1>&3)
+echo $DEVICE
+case $DEVICE in
+	IP-Cam)
+		HOSTNAME=$(sort -R device_data/ip_cams/hostnames | head -n 1  | cut -c 1-23)
+		VENDOR=$(echo "$HOSTNAME" | cut -d "-" -f1)
+		PREFIX=$(cat device_data/ip_cams/macs | grep -i $VENDOR | cut -d "	" -f1)
+		MAC=$PREFIX$(printf ': %02X: %02X: %02X' $[RANDOM%256] $[RANDOM%256] $[RANDOM%256])
+		echo $MAC > /root/MAC
+		echo $HOSTNAME > /etc/hostname
+		echo "127.0.0.1 $HOSTNAME" >> /etc/hosts
+	;;
+esac
 
-####Name the host something enticing ###
-sneakyname=$(whiptail --inputbox "Let's name your RasPot something enticing like 'SuperSensitiveServer'. Well maybe not that obvious, but you get the idea. Remember, hostnames cannot contain spaces or most special chars. Best to keep it to just alphanumeric and less thaann 24 characters." 20 60 3>&1 1>&2 2>&3)
-echo $sneakyname > /etc/hostname
-echo "127.0.0.1 $sneakyname" >> /etc/hosts
+
 
 ####Install PSAD ###
 whiptail --infobox "Installing a bunch of software like the log monitoring service and other dependencies...\n" 20 60
@@ -81,7 +92,7 @@ case $OPTION in
 esac
 
 ###update vars in configuration files
-sed -i "s/xhostnamex/$sneakyname/g" psad.conf
+sed -i "s/xhostnamex/$HOSTNAME/g" psad.conf
 sed -i "s/xemailx/$emailaddy/g" psad.conf
 sed -i "s/xenablescriptx/$enablescript/g" psad.conf
 sed -i "s/xalertingmethodx/$alertingmethod/g" psad.conf
@@ -109,7 +120,6 @@ psad --sig-update
 service psad restart
 #cp raspot.py /root/RasPot
 (crontab -l 2>/dev/null; echo "@reboot python /root/RasPot/raspot.py &") | crontab -
-#python /root/RasPot/raspot.py &
 ifconfig
 printf "\n \n"
 if whiptail --yesno "RasPot installation finished. You should reboot. Do it now?" 20 60
