@@ -121,7 +121,9 @@ service netfilter-persistent restart
 psad --sig-update
 service psad restart
 #cp raspot.py /root/RasPot
-(crontab -l 2>/dev/null; echo "@reboot python /root/RasPot/raspot.py &") | crontab -
+#(crontab -l 2>/dev/null; echo "@reboot python /root/RasPot/raspot.py &") | crontab -
+echo "cd /root/RasPot/ && nohup python raspot.py &" > /etc/rc.local
+echo "exit 0" >> /etc/rc.local
 ifconfig
 printf "\n \n"
 if whiptail --yesno "RasPot installation finished. You should reboot. Do it now?" 20 60
