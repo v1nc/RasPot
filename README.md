@@ -19,11 +19,11 @@ sudo ./installer.sh
 You can spoof a vulnerable device to make RasPot more juicy.
 Hostname and MAC address are generated out of a known pool.
 
-### IP-Cams
+### IP-Cams [_[raw source](https://raw.githubusercontent.com/pierrekim/pierrekim.github.io/6bd008fa7672325d470723bce18b7d00fad3d0e2/blog/2017-03-08-camera-goahead-0day.html)_]
 
 Finest selection of cheap IP cams that have root backdoor accounts and many more exploits 
 
-_[raw source](https://raw.githubusercontent.com/pierrekim/pierrekim.github.io/6bd008fa7672325d470723bce18b7d00fad3d0e2/blog/2017-03-08-camera-goahead-0day.html)_
+
 
 
 _MAC vendor list [raw source](https://gist.githubusercontent.com/aallan/b4bb86db86079509e6159810ae9bd3e4/raw/846ae1b646ab0f4d646af9115e47365f4118e5f6/mac-vendor.txt)_
