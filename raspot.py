@@ -20,7 +20,7 @@ def formattedprint(toprint):
 	print(curr + toprint)
 
 def notify(text):
-	os.system("bash /root/RasPot/telegram -text {}".format(text))
+	os.system("bash /root/RasPot/telegram.sh -text {}".format(text))
 
 def notify_connection(host,port):
 	notify("<b>⚠️⚠️⚠️RasPot Alert⚠️⚠️⚠️</b>%0A%0A<code>{}</code> tried to connect on port <code>{}</code>".format(host,port))
