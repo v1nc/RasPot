@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "RasPot is based on HoneyPi by mattymcfatty!"
+whiptail --infobox "RasPot is based on HoneyPi by mattymcfatty!\n" 20 60
 #check root
 if [ $UID -ne 0 ]
 then
@@ -107,7 +107,10 @@ psad --sig-update
 service psad restart
 cp raspot.py /root/RasPot
 (crontab -l 2>/dev/null; echo "@reboot python /root/RasPot/raspot.py &") | crontab -
-python /root/RasPot/raspot.py &
+#python /root/RasPot/raspot.py &
 ifconfig
-printf "\n \n ok, now reboot and you should be good to go. Then, go portscan this RasPot from another machine and see if you get an alert!\n"
-
+printf "\n \n"
+if whiptail --yesno "RasPot installation finished. You should reboot. Do it now?" 20 60
+ then
+  reboot now
+ fi
